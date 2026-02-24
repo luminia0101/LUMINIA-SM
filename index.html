@@ -15,14 +15,16 @@
 
         /* Navigation & Music Controls */
         .nav-ui { position: fixed; top: 15px; right: 20px; z-index: 1000; display: flex; align-items: center; gap: 20px; }
-        .ui-btn { font-size: 1rem; color: #D4AF37; cursor: pointer; opacity: 0.8; transition: 0.3s; background: none; border: none; outline: none; }
+        .ui-btn { font-size: 1rem; color: #D4AF37; cursor: pointer; opacity: 0.8; transition: 0.2s; background: none; border: none; outline: none; }
+        .ui-btn:active { transform: scale(0.9); }
         
         .nav-links {
             display: none; position: absolute; top: 40px; right: 0;
             background: rgba(0,0,0,0.95); border: 0.5px solid rgba(212, 175, 55, 0.3);
             border-radius: 5px; width: 160px; padding: 10px;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
         }
-        .nav-links a { display: block; color: #fff; text-decoration: none; padding: 10px; font-size: 0.75rem; letter-spacing: 2px; }
+        .nav-links a { display: block; color: #fff; text-decoration: none; padding: 12px; font-size: 0.75rem; letter-spacing: 2px; }
 
         .music-ui { position: fixed; top: 18px; left: 50%; transform: translateX(-50%); z-index: 1000; }
 
@@ -33,6 +35,12 @@
         }
         .video-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
         .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: -1; }
+
+        .scroll-arrow {
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+            color: #D4AF37; font-size: 1.5rem; animation: bounce 2s infinite; opacity: 0.8;
+        }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);} 40% {transform: translateX(-50%) translateY(-10px);} 60% {transform: translateX(-50%) translateY(-5px);} }
 
         /* Logo Animation */
         .logo-box img {
@@ -48,43 +56,59 @@
         .cursor { border-right: 2px solid #D4AF37; animation: blink 0.7s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* Section Layouts */
-        .section { padding: 90px 20px; max-width: 800px; margin: 0 auto; opacity: 0; transform: translateY(20px); transition: 0.8s ease; }
-        .section.show { opacity: 1; transform: translateY(0); }
+        /* Sections & Scroll Glow Effect */
+        .section { padding: 90px 20px; max-width: 800px; margin: 0 auto; opacity: 0.4; transform: translateY(20px); transition: all 0.6s ease; }
         .section-title { font-family: 'Cinzel', serif; color: #D4AF37; font-size: 1.5rem; margin-bottom: 40px; text-align: center; letter-spacing: 6px; }
 
-        /* Cards & Shadows */
+        /* Glow Active State */
+        .section.active { opacity: 1; transform: translateY(0); }
+        .section.active .minimal-card, .section.active .review-card {
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.25);
+            border-color: rgba(212, 175, 55, 0.4);
+        }
+
         .minimal-card { 
             line-height: 1.9; color: rgba(255,255,255,0.85); font-size: 0.95rem; 
             padding: 30px; background: rgba(255,255,255,0.02); border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 15px rgba(212,175,55,0.05); /* Shadow added */
+            border: 1px solid rgba(212, 175, 55, 0.1); transition: 0.5s;
         }
 
-        /* Connect Hub */
-        .social-list { display: flex; flex-direction: column; gap: 12px; max-width: 420px; margin: 0 auto; }
+        /* Connect Hub Fixed Styling */
+        .social-list { display: flex; flex-direction: column; gap: 15px; max-width: 420px; margin: 0 auto; }
         .social-row {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 18px 25px; background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(212,175,55,0.1); border-radius: 4px;
-            text-decoration: none; color: #fff; transition: 0.3s;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.5); /* Shadow added */
+            padding: 20px 25px; background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 8px;
+            text-decoration: none; color: #fff; transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
         }
-        .social-row:active { transform: scale(0.97); }
-        .social-row i { font-size: 1.3rem; color: #D4AF37; }
-        .status-txt { font-size: 0.65rem; color: #D4AF37; opacity: 0.7; }
+        
+        .social-row:hover {
+            transform: translateY(-5px);
+            background: rgba(212, 175, 55, 0.08);
+            border-color: #D4AF37;
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.2);
+        }
+        
+        .name-side { display: flex; flex-direction: column; align-items: center; flex: 1; text-align: center; gap: 4px; }
+        .brand-link-text { display: flex; align-items: center; gap: 12px; font-weight: 400; justify-content: center; }
+        .brand-link-text i { font-size: 1.3rem; color: #D4AF37; }
+        .status-txt { font-size: 0.6rem; color: #D4AF37; opacity: 0.8; letter-spacing: 1px; font-weight: bold; }
+
+        .spinner { width: 18px; height: 18px; border: 2.5px solid rgba(212,175,55,0.2); border-top: 2.5px solid #D4AF37; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         /* Review Section */
         .review-card {
             padding: 40px; background: #080808; border-radius: 10px;
-            border: 1px solid rgba(212,175,55,0.15); 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 20px rgba(212,175,55,0.05); /* Shadow added */
+            border: 1px solid rgba(212, 175, 55, 0.15); transition: 0.5s;
         }
         .star-rating { direction: rtl; display: inline-block; margin-bottom: 20px; }
         .star-rating input { display: none; }
         .star-rating label { color: #222; font-size: 2.2rem; cursor: pointer; transition: 0.2s; }
         .star-rating label:hover, .star-rating label:hover ~ label, .star-rating input:checked ~ label { color: #D4AF37; }
 
-        .mandatory { color: #ff0000; font-weight: bold; } /* Red mandatory sign */
+        .mandatory { color: #ff0000; font-weight: bold; }
         .field { width: 100%; padding: 14px; margin-bottom: 15px; background: #111; border: 1px solid #222; color: #fff; border-radius: 5px; outline: none; }
         .submit-btn { width: 100%; padding: 16px; background: #D4AF37; color: #000; font-weight: bold; border: none; letter-spacing: 2px; cursor: pointer; border-radius: 5px; }
 
@@ -93,7 +117,6 @@
         @media (max-width: 600px) {
             .logo-box img { width: 260px; }
             .section-title { font-size: 1.2rem; }
-            .typewriter-wrap { font-size: 1rem; }
         }
     </style>
 </head>
@@ -106,10 +129,10 @@
     <div class="nav-ui">
         <button class="ui-btn" onclick="showNav()"><i class="fas fa-bars-staggered"></i></button>
         <div class="nav-links" id="menu">
-            <a href="#vsn">VISION</a>
-            <a href="#hub">CONNECT</a>
-            <a href="#fnd">FOUNDER</a>
-            <a href="#rev">REVIEW</a>
+            <a href="#vsn" onclick="showNav()">VISION</a>
+            <a href="#hub" onclick="showNav()">CONNECT</a>
+            <a href="#fnd" onclick="showNav()">FOUNDER</a>
+            <a href="#rev" onclick="showNav()">REVIEW</a>
         </div>
     </div>
 
@@ -120,6 +143,7 @@
             <div class="logo-box"><img src="logo.png" id="brandLogo" alt="Luminia"></div>
             <div class="typewriter-wrap"><span id="txt"></span><span class="cursor"></span></div>
         </div>
+        <div class="scroll-arrow"><i class="fas fa-chevron-down"></i></div>
     </div>
 
     <div class="section" id="vsn">
@@ -136,22 +160,37 @@
         <h2 class="section-title">Connect Hub</h2>
         <div class="social-list">
             <a href="https://www.facebook.com/share/1AUeZoMiPu/" target="_blank" class="social-row">
-                <i class="fab fa-facebook-f"></i> <span>FACEBOOK</span> <i class="fas fa-arrow-right"></i>
+                <div class="name-side"><div class="brand-link-text"><i class="fab fa-facebook-f"></i> <span>FACEBOOK</span></div></div>
+                <i class="fas fa-arrow-right" style="font-size:0.8rem; color:#D4AF37"></i>
             </a>
             <a href="https://www.instagram.com/luminia.official.01?igsh=MTN0eTE4ZWlyZXc1Mw==" target="_blank" class="social-row">
-                <i class="fab fa-instagram"></i> <span>INSTAGRAM</span> <i class="fas fa-arrow-right"></i>
+                <div class="name-side"><div class="brand-link-text"><i class="fab fa-instagram"></i> <span>INSTAGRAM</span></div></div>
+                <i class="fas fa-arrow-right" style="font-size:0.8rem; color:#D4AF37"></i>
             </a>
             <a href="javascript:void(0)" onclick="alert('Coming Soon!')" class="social-row">
-                <i class="fab fa-whatsapp"></i> <span>WHATSAPP</span> <span class="status-txt">COMING SOON</span>
+                <div class="name-side">
+                    <div class="brand-link-text"><i class="fab fa-whatsapp"></i> <span>WHATSAPP</span></div>
+                    <span class="status-txt">COMING SOON</span>
+                </div>
+                <div class="spinner"></div>
             </a>
             <a href="mailto:luminia0101@gmail.com" class="social-row">
-                <i class="far fa-envelope"></i> <span>EMAIL </span> <i class="fas fa-arrow-right"></i>
+                <div class="name-side"><div class="brand-link-text"><i class="far fa-envelope"></i> <span>EMAIL US</span></div></div>
+                <i class="fas fa-arrow-right" style="font-size:0.8rem; color:#D4AF37"></i>
             </a>
-            <a href="javascript:void(0)" onclick="alert('Launching Soon!')" class="social-row">
-                <i class="fab fa-youtube"></i> <span>YOUTUBE</span> <span class="status-txt">COMING SOON</span>
+            <a href="javascript:void(0)" onclick="alert('Coming Soon!')" class="social-row">
+                <div class="name-side">
+                    <div class="brand-link-text"><i class="fab fa-youtube"></i> <span>YOUTUBE</span></div>
+                    <span class="status-txt">COMING SOON</span>
+                </div>
+                <div class="spinner"></div>
             </a>
-            <a href="javascript:void(0)" onclick="alert('Our official website is under construction!')" class="social-row">
-                <i class="fas fa-globe"></i> <span>WEBSITE</span> <span class="status-txt">COMING SOON</span>
+            <a href="javascript:void(0)" onclick="alert('Coming Soon!')" class="social-row">
+                <div class="name-side">
+                    <div class="brand-link-text"><i class="fas fa-globe"></i> <span>WEBSITE</span></div>
+                    <span class="status-txt">COMING SOON</span>
+                </div>
+                <div class="spinner"></div>
             </a>
         </div>
     </div>
@@ -179,10 +218,8 @@
                 </div></div>
                 <label style="font-size: 0.8rem; color:#D4AF37">Your Name <span class="mandatory">*</span></label>
                 <input type="text" name="name" class="field" placeholder="Enter full name" required>
-                
                 <label style="font-size: 0.8rem; color:#D4AF37">Your Review <span class="mandatory">*</span></label>
                 <textarea name="review" class="field" rows="3" placeholder="Write your thoughts..." required></textarea>
-                
                 <button type="submit" class="submit-btn">SUBMIT REVIEW</button>
             </form>
         </div>
@@ -218,11 +255,23 @@
 
         window.onscroll = function() {
             const l = document.getElementById('brandLogo');
-            if (window.scrollY > 80) l.classList.add('logo-mini');
-            else l.classList.remove('logo-mini');
+            const arrow = document.querySelector('.scroll-arrow');
+            if (window.scrollY > 80) {
+                l.classList.add('logo-mini');
+                if(arrow) arrow.style.opacity = '0'; 
+            } else {
+                l.classList.remove('logo-mini');
+                if(arrow) arrow.style.opacity = '0.8';
+            }
 
+            // Highlighting active section with Glow
             document.querySelectorAll('.section').forEach(s => {
-                if(s.getBoundingClientRect().top < window.innerHeight * 0.85) s.classList.add('show');
+                let rect = s.getBoundingClientRect();
+                if(rect.top < window.innerHeight * 0.7 && rect.bottom > window.innerHeight * 0.3) {
+                    s.classList.add('active');
+                } else {
+                    s.classList.remove('active');
+                }
             });
         };
 
