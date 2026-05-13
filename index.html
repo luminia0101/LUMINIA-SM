@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LUMINIA</title>
     <link rel="icon" type="image/jpeg" href="logo1.jpg">
+    <!-- CHANGE 5: preconnect for faster Google Font loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@100;200;300;400;600&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
 
@@ -195,7 +198,9 @@
         }
         .nav-links a {
             display: block; color: rgba(255,255,255,0.7);
-            text-decoration: none; padding: 14px 25px;
+            text-decoration: none;
+            /* CHANGE 3: larger touch target for mobile */
+            padding: 18px 25px;
             font-size: 0.65rem; letter-spacing: 4px;
             transition: all 0.3s; cursor: none;
             position: relative;
@@ -518,6 +523,91 @@
             width: 1px; height: 80px; background: linear-gradient(180deg, transparent, rgba(212,175,55,0.3), transparent);
             margin: 0 auto; position: relative; z-index: 2;
         }
+
+        /* ══════════════════════════════════════════
+           CHANGE 2: TOAST NOTIFICATION
+        ══════════════════════════════════════════ */
+        #toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            z-index: 99998;
+            background: rgba(5,5,5,0.96);
+            border: 1px solid rgba(212,175,55,0.35);
+            border-radius: 3px;
+            padding: 14px 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 20px rgba(212,175,55,0.08);
+            white-space: nowrap;
+        }
+        #toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        #toast .toast-icon {
+            width: 28px; height: 28px; border-radius: 50%;
+            border: 1px solid rgba(212,175,55,0.4);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        #toast .toast-icon i { color: var(--gold); font-size: 0.7rem; }
+        #toast .toast-text { display: flex; flex-direction: column; gap: 3px; }
+        #toast .toast-title {
+            font-family: 'Cinzel', serif;
+            font-size: 0.6rem; letter-spacing: 3px; color: var(--gold);
+        }
+        #toast .toast-sub {
+            font-size: 0.5rem; letter-spacing: 2px; color: rgba(255,255,255,0.4);
+        }
+        #toast .toast-bar {
+            position: absolute; bottom: 0; left: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            width: 100%; transform-origin: left;
+            animation: none;
+        }
+        #toast.show .toast-bar {
+            animation: toastProgress 2.8s linear forwards;
+        }
+        @keyframes toastProgress {
+            from { transform: scaleX(1); }
+            to   { transform: scaleX(0); }
+        }
+
+        /* ══════════════════════════════════════════
+           CHANGE 4: BACK TO TOP BUTTON
+        ══════════════════════════════════════════ */
+        #backToTop {
+            position: fixed;
+            bottom: 36px;
+            right: 24px;
+            z-index: 1000;
+            width: 42px; height: 42px;
+            border-radius: 50%;
+            border: 1px solid rgba(212,175,55,0.3);
+            background: rgba(5,5,5,0.85);
+            backdrop-filter: blur(10px);
+            color: var(--gold);
+            font-size: 0.85rem;
+            display: flex; align-items: center; justify-content: center;
+            cursor: none;
+            opacity: 0; pointer-events: none;
+            transform: translateY(10px);
+            transition: opacity 0.4s ease, transform 0.4s ease, border-color 0.3s, box-shadow 0.3s;
+        }
+        #backToTop.visible {
+            opacity: 1; pointer-events: auto; transform: translateY(0);
+        }
+        #backToTop:hover {
+            border-color: var(--gold);
+            box-shadow: 0 0 20px var(--gold-glow);
+        }
+
         @media (max-width: 600px) {
             .logo-box img { width: 240px; }
             .section-title { font-size: 1.2rem; }
@@ -542,6 +632,25 @@
             </div>
         </div>
     </div>
+
+    <!-- ══════════════════════════════════════════
+         CHANGE 2: TOAST ELEMENT
+    ══════════════════════════════════════════ -->
+    <div id="toast">
+        <div class="toast-icon"><i class="fas fa-hourglass-half"></i></div>
+        <div class="toast-text">
+            <div class="toast-title" id="toastTitle">COMING SOON</div>
+            <div class="toast-sub" id="toastSub">Stay tuned for something special</div>
+        </div>
+        <div class="toast-bar"></div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         CHANGE 4: BACK TO TOP BUTTON
+    ══════════════════════════════════════════ -->
+    <button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <i class="fas fa-chevron-up"></i>
+    </button>
 
     <!-- ══════════════════════════════════════════
          MAIN CONTENT
@@ -617,7 +726,8 @@
                         <div class="s-right"><i class="fas fa-arrow-right s-arrow"></i></div>
                     </a>
 
-                    <a href="javascript:void(0)" onclick="alert('WhatsApp — Coming Soon!')" class="social-row">
+                    <!-- CHANGE 2: WhatsApp toast -->
+                    <a href="javascript:void(0)" onclick="showToast('WHATSAPP','Direct connect — launching very soon!')" class="social-row">
                         <div class="s-left">
                             <div class="s-icon-wrap"><i class="fab fa-whatsapp"></i></div>
                             <div class="s-info">
@@ -642,7 +752,8 @@
                         <div class="s-right"><i class="fas fa-arrow-right s-arrow"></i></div>
                     </a>
 
-                    <a href="javascript:void(0)" onclick="alert('YouTube — Coming Soon! See You Soon.')" class="social-row">
+                    <!-- CHANGE 2: YouTube toast -->
+                    <a href="javascript:void(0)" onclick="showToast('YOUTUBE','Videos & more — see you soon!')" class="social-row">
                         <div class="s-left">
                             <div class="s-icon-wrap"><i class="fab fa-youtube"></i></div>
                             <div class="s-info">
@@ -656,7 +767,7 @@
                         </div>
                     </a>
 
-                    <a href="javascript:void(0)" onclick="alert('Our Own Website — Coming Soon! See You Soon.')" class="social-row">
+                    <a href="javascript:void(0)" onclick="showToast('WEBSITE','luminia.in — our own world, coming soon!')" class="social-row">
                         <div class="s-left">
                             <div class="s-icon-wrap"><i class="fas fa-globe"></i></div>
                             <div class="s-info">
@@ -703,18 +814,30 @@ What began as an idea has evolved into a refined expression of artistry, where e
             <h2 class="section-title">Rate Your <span>Experience</span></h2>
             <div class="title-line"></div>
             <div class="review-card">
-                <div class="star-rating">
+                <!-- CHANGE 1: star rating UI (hidden input carries value into form) -->
+                <div class="star-rating" id="starUI">
                     <input type="radio" id="s5" name="stars" value="5"><label for="s5" class="fas fa-star"></label>
                     <input type="radio" id="s4" name="stars" value="4"><label for="s4" class="fas fa-star"></label>
                     <input type="radio" id="s3" name="stars" value="3"><label for="s3" class="fas fa-star"></label>
                     <input type="radio" id="s2" name="stars" value="2"><label for="s2" class="fas fa-star"></label>
                     <input type="radio" id="s1" name="stars" value="1"><label for="s1" class="fas fa-star"></label>
                 </div>
+
                 <form action="https://formspree.io/f/xzdayenb" method="POST" id="revForm">
+                    <!-- CHANGE 1: hidden field that carries star rating value -->
+                    <input type="hidden" name="rating" id="starHidden" value="">
+
                     <div class="field-wrap">
                         <label class="field-label">YOUR NAME <span class="mandatory">*</span></label>
                         <input type="text" name="name" class="field" placeholder="Enter your name" required>
                     </div>
+
+                    <!-- CHANGE 1: optional email field -->
+                    <div class="field-wrap">
+                        <label class="field-label">YOUR EMAIL <span style="font-size:0.5rem;color:rgba(212,175,55,0.4);letter-spacing:1px;">(optional — stay connected with us)</span></label>
+                        <input type="email" name="email" class="field" placeholder="Enter your email address">
+                    </div>
+
                     <div class="field-wrap">
                         <label class="field-label">YOUR REVIEW <span class="mandatory">*</span></label>
                         <textarea name="review" class="field" rows="4" placeholder="Share your thoughts with us..." required></textarea>
@@ -737,7 +860,7 @@ What began as an idea has evolved into a refined expression of artistry, where e
        INTRO LOGIC
     ══════════════════════════════════════════ */
     (function(){
-        const INTRO_DURATION = 3000; // 3 seconds
+        const INTRO_DURATION = 3000;
 
         const introScreen = document.getElementById('intro-screen');
         const introVideo  = document.getElementById('intro-video');
@@ -745,10 +868,7 @@ What began as an idea has evolved into a refined expression of artistry, where e
         const barDot      = document.getElementById('intro-bar-dot');
         const mainContent = document.getElementById('main-content');
 
-        // ── Device detection: portrait/mobile = intro1.mp4, landscape/desktop = intro2.mp4
         function getIntroSrc() {
-            // window.screen.width is physical screen width (ignores zoom)
-            // For mobile detection: screen width <= 768 OR touch device in portrait
             const isMobile = (
                 window.screen.width <= 768 ||
                 (window.matchMedia("(max-width: 768px)").matches) ||
@@ -757,42 +877,29 @@ What began as an idea has evolved into a refined expression of artistry, where e
             return isMobile ? 'intro1.mp4' : 'intro2.mp4';
         }
 
-        // Set video source based on device
         const src = getIntroSrc();
         introVideo.innerHTML = `<source src="${src}" type="video/mp4">`;
         introVideo.load();
 
-        // ── Loading bar animation (0 → 100% over INTRO_DURATION)
         let startTime = null;
         function animateBar(timestamp) {
             if (!startTime) startTime = timestamp;
             const elapsed = timestamp - startTime;
             const progress = Math.min(elapsed / INTRO_DURATION, 1);
             const pct = progress * 100;
-
             barFill.style.width = pct + '%';
             barDot.style.left = 'calc(' + pct + '% - 2.5px)';
-
-            if (progress < 1) {
-                requestAnimationFrame(animateBar);
-            }
+            if (progress < 1) requestAnimationFrame(animateBar);
         }
         requestAnimationFrame(animateBar);
 
-        // ── Play intro video (muted so autoplay works on all browsers)
         introVideo.play().catch(() => {});
 
-        // ── After 3s: fade out intro, show main
         setTimeout(() => {
             introScreen.classList.add('fade-out');
             mainContent.classList.add('visible');
-
-            // Remove from DOM after fade completes (keeps memory clean)
-            setTimeout(() => {
-                introScreen.remove();
-            }, 1000);
+            setTimeout(() => { introScreen.remove(); }, 1000);
         }, INTRO_DURATION);
-
     })();
 
     /* ══════════════════════════════════════════
@@ -894,6 +1001,14 @@ What began as an idea has evolved into a refined expression of artistry, where e
                 s.classList.remove('active');
             }
         });
+
+        /* CHANGE 4: back to top visibility */
+        const btn = document.getElementById('backToTop');
+        if(window.scrollY > 300){
+            btn.classList.add('visible');
+        } else {
+            btn.classList.remove('visible');
+        }
     });
 
     /* ── STAGGERED SOCIAL CARDS ── */
@@ -916,7 +1031,42 @@ What began as an idea has evolved into a refined expression of artistry, where e
     const hubSection = document.getElementById('hub');
     if(hubSection) observer.observe(hubSection);
 
-    /* ── REVIEW SUBMIT ── */
+    /* ══════════════════════════════════════════
+       CHANGE 1: STAR RATING → hidden field sync
+    ══════════════════════════════════════════ */
+    document.querySelectorAll('#starUI input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', function(){
+            document.getElementById('starHidden').value = this.value + ' Stars';
+        });
+    });
+
+    /* ══════════════════════════════════════════
+       CHANGE 2: TOAST NOTIFICATION
+    ══════════════════════════════════════════ */
+    let toastTimer = null;
+    function showToast(title, sub){
+        const toast = document.getElementById('toast');
+        document.getElementById('toastTitle').textContent = title + ' — COMING SOON';
+        document.getElementById('toastSub').textContent = sub;
+
+        // Reset animation by cloning toast bar
+        const bar = toast.querySelector('.toast-bar');
+        const newBar = bar.cloneNode(true);
+        bar.parentNode.replaceChild(newBar, bar);
+
+        toast.classList.remove('show');
+        void toast.offsetWidth; // reflow
+        toast.classList.add('show');
+
+        if(toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(()=>{
+            toast.classList.remove('show');
+        }, 3000);
+    }
+
+    /* ══════════════════════════════════════════
+       REVIEW SUBMIT
+    ══════════════════════════════════════════ */
     document.getElementById('revForm').onsubmit = async(e)=>{
         e.preventDefault();
         const btn = e.target.querySelector('.submit-btn');
